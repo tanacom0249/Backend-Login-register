@@ -22,3 +22,30 @@ content-type: application/json
  "city" : "Anytown",
  "postalCode" : "52212"
 }
+
+
+
+### Send OTP for Forgot Password
+POST http://localhost:5000/api/auth/request-otp HTTP/1.1
+{
+    "email" : "thanacom0249@gmail.com"
+}
+
+### Get OTP after requesting 
+POST http://localhost:5000/api/auth/verify-otp HTTP/1.1
+content-type: application/json
+
+{
+  "email": "thanacom0249@gmail.com",
+  "otp": "378156"
+}
+
+### Reset Password 
+POST http://localhost:5000/api/auth/reset-password HTTP/1.1
+content-type: application/json
+
+{
+ "email": "thanacom0249@gmail.com",
+  "otp": "378156",
+  "newPassword": "thanacom@22333"
+}

@@ -1,7 +1,12 @@
 import createError from "http-errors";
 import {
-  createToken,createUser,findUserByEmail,
-  updateOtp, findUserByOtp, clearOtp,} from "../service/auth.service.js";
+  createToken,
+  createUser,
+  findUserByEmail,
+  updateOtp,
+  findUserByOtp,
+  clearOtp,
+} from "../service/auth.service.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { prisma } from "../config/prismaClient.js";
@@ -114,7 +119,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    pass: process.env.EMAIL_PASS, // App Password here, NOT your Gmail login password
   },
 });
 
