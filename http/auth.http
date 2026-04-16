@@ -1,0 +1,24 @@
+### Login
+POST http://localhost:5000/api/auth/login HTTP/1.1
+content-type: application/json
+
+{
+ "identity" : "tanacom0249@hotmail.com",
+ "password" : "Jammy@1223_3432"
+}
+###  Register
+}
+POST http://localhost:5000/api/auth/register HTTP/1.1
+content-type: application/json
+
+{
+ "identity" : "andy@cc20.th",
+ "firstName" : "Andy",
+ "lastName" : "Smith",
+ "email" : "andy@cc20.th",
+ "password" : "a1234",
+ "role" : "Seller",
+ "street" : "123 Main St",
+ "city" : "Anytown",
+ "postalCode" : "52212"
+}
