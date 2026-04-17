@@ -13,36 +13,43 @@ import { prisma } from "../config/prismaClient.js";
 import nodemailer from "nodemailer";
 
 export async function register(req, res, next) {
-  // 1. แกะค่าจาก body ตามโครงสร้างที่ Frontend ส่งมา
+  // แกะค่าจาก body ตามโครงสร้างที่ Frontend ส่งมา
   const {
     firstName,
     lastName,
     username,
     email,
+    phone,
     password,
-    roles, // รับเป็น Array ตามที่ Frontend ส่ง
-    address, // รับเป็น Object ตามที่ Frontend ส่ง
+    role,
+    street,
+    city,
+    postalCode,
+    label,
+    state,
+    country,
   } = req.body;
-
-  // ดึงค่าข้างใน address ออกมา
-  const { street, city, postalCode, suite } = address || {};
 
   try {
     await prisma.$connect();
     console.log("Connected to Database");
 
-    // 2. Validation: ตรวจสอบข้อมูลให้ครบถ้วน
+    // Validation: ตรวจสอบข้อมูลให้ครบถ้วน
     if (
       !firstName ||
       !lastName ||
       !username ||
       !email ||
       !password ||
+      !phone ||
       !street ||
       !city ||
       !postalCode ||
-      !roles ||
-      roles.length === 0
+      !label ||
+      !state ||
+      !country ||
+      !role ||
+      role.length === 0
     ) {
       //  return เพื่อหยุดฟังก์ชันทันที
       return res.status(400).json({ message: "Please fill in all fields" });
@@ -55,17 +62,23 @@ export async function register(req, res, next) {
 
     const hashPassword = await bcrypt.hash(password, 5);
 
-    // 3. สร้าง User ผ่าน Service
+    // สร้าง User ผ่าน Service
     const newUser = await createUser({
       firstName,
       lastName,
       username,
       email,
+      phone,
       hashPassword,
-      role: roles[0],
+      role,
+      hashPassword,
+      role,
       street,
       city,
       postalCode,
+      label,
+      state,
+      country,
     });
 
     return res.status(201).json({
@@ -75,15 +88,14 @@ export async function register(req, res, next) {
         firstName: newUser.firstName,
         lastName: newUser.lastName,
         username: newUser.username,
-        role: newUser.role,
         email: newUser.email,
-        street: newUser.street,
-        city: newUser.city,
-        postalCode: newUser.postalCode,
+        role: newUser.role,
+
+        address: newUser.addresses?.[0] || null,
       },
     });
   } catch (error) {
-    next(error); // ส่งไปที่ Error Middleware
+    next(error);
   }
 }
 
@@ -105,6 +117,7 @@ export async function login(req, res, next) {
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
+        role: user.role,
       },
     });
   } catch (error) {

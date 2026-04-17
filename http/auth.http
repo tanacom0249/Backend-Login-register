@@ -12,15 +12,21 @@ POST http://localhost:5000/api/auth/register HTTP/1.1
 content-type: application/json
 
 {
- "identity" : "andy@cc20.th",
- "firstName" : "Andy",
- "lastName" : "Smith",
- "email" : "andy@cc20.th",
- "password" : "a1234",
- "role" : "Seller",
- "street" : "123 Main St",
- "city" : "Anytown",
- "postalCode" : "52212"
+ "identity"   : "anddy333@gmail.com",
+ "firstName"  : "Andy33",
+ "lastName"   : "Smith333",
+ "email"      : "anddy333@gmail.com",
+ "username"   : "anddy333",
+ "password"   : "123345333",
+ "phone"      : "123433330",
+ "role"       : "Seller",
+ "street"     : "333 Main St",
+ "city"       : "town",
+ "postalCode" : "33312",
+ "label"      : "Home",
+ "state"      : "town",
+ "country"    : "USA"
+
 }
 
 

@@ -18,25 +18,41 @@ enum Role {
 }
 
 model User {
-    id       Int     @id @default(autoincrement())
+    id        Int     @id @default(autoincrement())
+    username  String  @unique
+    email     String  @unique
+    password  String
     firstName String
-    lastName String
-    username String
-    email    String  @unique
-    password String
-    role     Role    @default(Buyer)
-    street   String?
-    city     String?
-    state    String?
-    country  String?
-    Suite    String?
-    postalCode String?
-    
-    // --- ส่วนที่ต้องเพิ่มสำหรับ OTP ---
-  resetOtp        String?   // เก็บเลข OTP 6 หลัก
-  resetOtpExpires DateTime? // เก็บเวลาหมดอายุของ OTP
-  // ------------------------------
+    lastName  String
+    phone     String? @unique
+    role      Role    @default(Buyer)
+
+    // --- OTP Management ---
+    resetOtp        String?
+    resetOtpExpires DateTime?
+
+    addresses Address[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@index([email, phone])
+}
+
+model Address {
+    id         Int     @id @default(autoincrement())
+    label      String
+    street     String
+    city       String
+    state      String
+    postalCode String
+    country    String
+    isDefault  Boolean @default(false)
+    userId     Int
+    user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([userId])
 }

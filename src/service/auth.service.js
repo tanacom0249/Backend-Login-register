@@ -1,14 +1,16 @@
 import { prisma } from "../config/prismaClient.js";
 import jwt from "jsonwebtoken";
+
 export const findUserByEmail = async (email) => {
   const user = await prisma.user.findFirst({
     where: { email: email },
+    include: { addresses: true },
   });
   return user;
 };
 
 export const createUser = async (dataObj) => {
-    console.log('dataObj', dataObj)
+  console.log("dataObj", dataObj);
   const newUser = await prisma.user.create({
     data: {
       firstName: dataObj.firstName,
@@ -17,11 +19,25 @@ export const createUser = async (dataObj) => {
       email: dataObj.email,
       password: dataObj.hashPassword,
       role: dataObj.role,
-      street: dataObj.street,
-      city: dataObj.city,
-      postalCode: dataObj.postalCode,
+      phone: dataObj.phone,
+
+      addresses: {
+        create: {
+          street: dataObj.street,
+          city: dataObj.city,
+          postalCode: dataObj.postalCode,
+          label: dataObj.label,
+          state: dataObj.state,
+          country: dataObj.country,
+          isDefault: true,
+        },
+      },
+    },
+    include: {
+      addresses: true,
     },
   });
+
   return newUser;
 };
 
@@ -51,14 +67,12 @@ export const editUser = async (email, username, hashPassword) => {
     data: {
       username,
       password: hashPassword,
-      role: user.role,
     },
   });
   return result;
 };
 
-
-// ในไฟล์ Service 
+// ในไฟล์ Service
 
 // 1. เก็บ OTP ลงใน User
 export const updateOtp = async (email, otp, expires) => {
